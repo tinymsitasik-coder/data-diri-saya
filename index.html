@@ -1,0 +1,860 @@
+```html
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio - Silvia Apriliany</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome untuk Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#fdf2f8',
+                            100: '#fce7f3',
+                            200: '#fbcfe8',
+                            300: '#f9a8d4',
+                            400: '#f472b6',
+                            500: '#ec4899',
+                            600: '#db2777',
+                            700: '#be185d',
+                            800: '#9d174d',
+                            900: '#831843',
+                        },
+                        secondary: {
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-primary-200 selection:text-primary-900">
+
+    <!-- Notifikasi Toast (Pengganti alert) -->
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-xs w-full pointer-events-none"></div>
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200/80">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-2">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-primary-600 to-secondary-600 flex items-center justify-center text-white font-display font-bold text-lg shadow-md">
+                        SA
+                    </div>
+                    <span class="font-display font-bold text-lg text-slate-900 tracking-tight">Silvia<span class="text-primary-600">.portofolio</span></span>
+                </div>
+                
+                <div class="flex items-center gap-3">
+                    <!-- Tombol Menu Identitas dengan Kunci -->
+                    <button onclick="requestToken('identitas')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary-50 hover:bg-primary-100 text-primary-700 font-medium text-sm transition-all border border-primary-200 shadow-sm active:scale-95">
+                        <i class="fa-solid fa-lock text-xs"></i>
+                        <span>Menu Identitas</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero / Profil Utama -->
+    <header class="relative overflow-hidden bg-gradient-to-b from-primary-100/60 via-white to-slate-50 pt-10 pb-16 border-b border-slate-200/60">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-3xl p-6 sm:p-10 shadow-xl shadow-slate-200/50 border border-slate-100 relative">
+                
+                <!-- Tombol Edit Cepat Profil -->
+                <button onclick="requestToken('identitas')" title="Update Data Identitas" class="absolute top-6 right-6 p-2.5 rounded-xl bg-slate-100 hover:bg-primary-100 text-slate-600 hover:text-primary-600 transition-colors">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <!-- Foto Profil -->
+                    <div class="relative group shrink-0">
+                        <div class="w-36 h-36 sm:w-44 sm:h-44 rounded-full p-1.5 bg-gradient-to-tr from-primary-500 via-secondary-500 to-amber-400 shadow-lg">
+                            <img id="profile-img" 
+                                 src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80" 
+                                 onerror="this.src='https://placehold.co/400x400/ec4899/ffffff?text=Silvia+A'"
+                                 alt="Foto Profil Silvia Apriliany" 
+                                 class="w-full h-full object-cover rounded-full border-4 border-white bg-white">
+                        </div>
+                        <span class="absolute bottom-2 right-2 w-8 h-8 rounded-full bg-emerald-500 border-4 border-white flex items-center justify-center text-white text-xs shadow" title="Status: Murid Aktif">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </span>
+                    </div>
+
+                    <!-- Detail Identitas Utama -->
+                    <div class="flex-1 text-center md:text-left">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-50 text-primary-700 text-xs font-semibold mb-3 border border-primary-100">
+                            <i class="fa-solid fa-sparkles"></i>
+                            <span id="disp-pekerjaan">Murid</span> • <span id="disp-jk">Perempuan</span>
+                        </div>
+                        
+                        <h1 id="disp-nama" class="font-display text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
+                            Silvia Apriliany
+                        </h1>
+                        
+                        <p class="text-slate-500 text-sm sm:text-base max-w-2xl mb-6">
+                            Halo! Selamat datang di halaman portofolio digital saya. Saya adalah seorang murid yang memiliki ketertarikan pada dunia kreativitas, organisasi, dan bermain game.
+                        </p>
+
+                        <!-- Grid Info Singkat Identitas -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-left mb-6">
+                            <div class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                                <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-cake-candles"></i>
+                                </div>
+                                <div class="overflow-hidden">
+                                    <p class="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Tanggal Lahir</p>
+                                    <p id="disp-ttl" class="text-sm font-semibold text-slate-700 truncate">17 April 2012</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                                <div class="w-9 h-9 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                </div>
+                                <div class="overflow-hidden">
+                                    <p class="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Alamat</p>
+                                    <p id="disp-alamat" class="text-sm font-semibold text-slate-700 truncate">Jln Leuwidahukaler</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                                <div class="w-9 h-9 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-gamepad"></i>
+                                </div>
+                                <div class="overflow-hidden">
+                                    <p class="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Hobi</p>
+                                    <p id="disp-hobi" class="text-sm font-semibold text-slate-700 truncate">Main Game</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                                <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-user-tie"></i>
+                                </div>
+                                <div class="overflow-hidden">
+                                    <p class="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Tokoh Idola</p>
+                                    <p id="disp-idola" class="text-sm font-semibold text-slate-700 truncate">R.A. Kartini</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100 sm:col-span-2 lg:col-span-2">
+                                <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                                </div>
+                                <div class="flex-1 flex flex-wrap items-center justify-between gap-2">
+                                    <div>
+                                        <p class="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Kontak & Sosial Media</p>
+                                        <div class="flex flex-wrap items-center gap-3 mt-0.5 text-xs sm:text-sm font-semibold text-slate-700">
+                                            <a id="link-wa" href="https://wa.me/628979928713" target="_blank" class="hover:text-emerald-600 flex items-center gap-1">
+                                                <span id="disp-wa">08979928713</span>
+                                            </a>
+                                            <span class="text-slate-300">|</span>
+                                            <a id="link-ig" href="https://instagram.com/slpiapril" target="_blank" class="hover:text-pink-600 flex items-center gap-1">
+                                                <i class="fa-brands fa-instagram text-pink-500"></i> <span id="disp-ig">@slpiapril</span>
+                                            </a>
+                                            <span class="text-slate-300">|</span>
+                                            <a id="link-tiktok" href="https://tiktok.com/@slpiapril" target="_blank" class="hover:text-slate-900 flex items-center gap-1">
+                                                <i class="fa-brands fa-tiktok text-slate-800"></i> <span id="disp-tiktok">@slpiapril</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Konten Utama: 6 Bagian Portofolio -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+            <div>
+                <h2 class="font-display text-2xl font-bold text-slate-900">Data & Rekam Jejak</h2>
+                <p class="text-sm text-slate-500">Klik tombol <span class="font-semibold text-primary-600">"Update Data"</span> pada setiap kategori untuk menambah atau memperbarui informasi.</p>
+            </div>
+            <div id="auth-status-badge" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-200/70 text-slate-600 text-xs font-medium self-start sm:self-auto">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Mode Kunci Aktif (Token diperlukan untuk edit)</span>
+            </div>
+        </div>
+
+        <!-- Grid 6 Kategori Data -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <!-- 1. Prestasi -->
+            <section class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80 flex flex-col justify-between hover:shadow-md transition-shadow">
+                <div>
+                    <div class="flex items-center justify-between gap-3 mb-5 pb-4 border-b border-slate-100">
+                        <div class="flex items-center gap-3">
+                            <div class="w-11 h-11 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-trophy"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-display font-bold text-lg text-slate-900">Prestasi</h3>
+                                <p class="text-xs text-slate-400">Penghargaan & Pencapaian</p>
+                            </div>
+                        </div>
+                        <button onclick="openSectionModal('prestasi')" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-semibold transition-colors">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Update Data</span>
+                        </button>
+                    </div>
+                    <ul id="list-prestasi" class="space-y-3">
+                        <!-- Diisi melalui JavaScript -->
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 2. Keahlian -->
+            <section class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80 flex flex-col justify-between hover:shadow-md transition-shadow">
+                <div>
+                    <div class="flex items-center justify-between gap-3 mb-5 pb-4 border-b border-slate-100">
+                        <div class="flex items-center gap-3">
+                            <div class="w-11 h-11 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-display font-bold text-lg text-slate-900">Keahlian</h3>
+                                <p class="text-xs text-slate-400">Skill & Kemampuan Diri</p>
+                            </div>
+                        </div>
+                        <button onclick="openSectionModal('keahlian')" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-semibold transition-colors">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Update Data</span>
+                        </button>
+                    </div>
+                    <div id="list-keahlian" class="flex flex-wrap gap-2">
+                        <!-- Diisi melalui JavaScript -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Riwayat Pendidikan -->
+            <section class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80 flex flex-col justify-between hover:shadow-md transition-shadow">
+                <div>
+                    <div class="flex items-center justify-between gap-3 mb-5 pb-4 border-b border-slate-100">
+                        <div class="flex items-center gap-3">
+                            <div class="w-11 h-11 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-school"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-display font-bold text-lg text-slate-900">Riwayat Pendidikan</h3>
+                                <p class="text-xs text-slate-400">Jenjang Sekolah yang Ditempuh</p>
+                            </div>
+                        </div>
+                        <button onclick="openSectionModal('pendidikan')" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-semibold transition-colors">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Update Data</span>
+                        </button>
+                    </div>
+                    <ul id="list-pendidikan" class="space-y-3">
+                        <!-- Diisi melalui JavaScript -->
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 4. Pengalaman Organisasi -->
+            <section class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80 flex flex-col justify-between hover:shadow-md transition-shadow">
+                <div>
+                    <div class="flex items-center justify-between gap-3 mb-5 pb-4 border-b border-slate-100">
+                        <div class="flex items-center gap-3">
+                            <div class="w-11 h-11 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-users"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-display font-bold text-lg text-slate-900">Pengalaman Organisasi</h3>
+                                <p class="text-xs text-slate-400">Ekstrakurikuler & Kepanitiaan</p>
+                            </div>
+                        </div>
+                        <button onclick="openSectionModal('organisasi')" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-semibold transition-colors">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Update Data</span>
+                        </button>
+                    </div>
+                    <ul id="list-organisasi" class="space-y-3">
+                        <!-- Diisi melalui JavaScript -->
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 5. Karya / Produk -->
+            <section class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80 flex flex-col justify-between hover:shadow-md transition-shadow">
+                <div>
+                    <div class="flex items-center justify-between gap-3 mb-5 pb-4 border-b border-slate-100">
+                        <div class="flex items-center gap-3">
+                            <div class="w-11 h-11 rounded-2xl bg-pink-100 text-pink-600 flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-palette"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-display font-bold text-lg text-slate-900">Karya / Produk</h3>
+                                <p class="text-xs text-slate-400">Hasil Kreativitas & Proyek</p>
+                            </div>
+                        </div>
+                        <button onclick="openSectionModal('karya')" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-pink-50 hover:bg-pink-100 text-pink-700 text-xs font-semibold transition-colors">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Update Data</span>
+                        </button>
+                    </div>
+                    <ul id="list-karya" class="space-y-3">
+                        <!-- Diisi melalui JavaScript -->
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 6. Riwayat Penyakit -->
+            <section class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80 flex flex-col justify-between hover:shadow-md transition-shadow">
+                <div>
+                    <div class="flex items-center justify-between gap-3 mb-5 pb-4 border-b border-slate-100">
+                        <div class="flex items-center gap-3">
+                            <div class="w-11 h-11 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-notes-medical"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-display font-bold text-lg text-slate-900">Riwayat Penyakit</h3>
+                                <p class="text-xs text-slate-400">Catatan Kesehatan & Alergi</p>
+                            </div>
+                        </div>
+                        <button onclick="openSectionModal('penyakit')" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold transition-colors">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Update Data</span>
+                        </button>
+                    </div>
+                    <ul id="list-penyakit" class="space-y-3">
+                        <!-- Diisi melalui JavaScript -->
+                    </ul>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-8 mt-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p class="text-sm text-slate-500">
+                &copy; 2026 <span class="font-semibold text-slate-800">Silvia Apriliany</span>. Semua Hak Dilindungi.
+            </p>
+            <div class="flex items-center gap-4">
+                <a href="https://wa.me/628979928713" target="_blank" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-emerald-100 text-slate-600 hover:text-emerald-600 flex items-center justify-center transition-colors" title="WhatsApp">
+                    <i class="fa-brands fa-whatsapp"></i>
+                </a>
+                <a href="https://instagram.com/slpiapril" target="_blank" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-pink-100 text-slate-600 hover:text-pink-600 flex items-center justify-center transition-colors" title="Instagram @slpiapril">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+                <a href="https://tiktok.com/@slpiapril" target="_blank" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 flex items-center justify-center transition-colors" title="TikTok @slpiapril">
+                    <i class="fa-brands fa-tiktok"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========================================== -->
+    <!-- MODAL 1: VERIFIKASI TOKEN / PASSWORD       -->
+    <!-- ========================================== -->
+    <div id="token-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-100 transform transition-all">
+            <div class="w-12 h-12 rounded-2xl bg-primary-100 text-primary-600 flex items-center justify-center text-xl mb-4 mx-auto">
+                <i class="fa-solid fa-key"></i>
+            </div>
+            <h3 class="font-display text-xl font-bold text-center text-slate-900 mb-1">Verifikasi Keamanan</h3>
+            <p class="text-sm text-center text-slate-500 mb-6">Masukkan token/password untuk membuka menu pengisian data identitas.</p>
+            
+            <form id="token-form" onsubmit="verifyToken(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Token / Password</label>
+                    <input type="password" id="token-input" placeholder="Masukkan token..." required
+                           class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 outline-none text-center text-lg tracking-widest font-bold">
+                </div>
+                <div class="flex items-center gap-3 pt-2">
+                    <button type="button" onclick="closeModal('token-modal')" class="flex-1 py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition-colors">
+                        Batal
+                    </button>
+                    <button type="submit" class="flex-1 py-3 px-4 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-sm shadow-md shadow-primary-600/20 transition-all">
+                        Buka Menu
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 2: FORM IDENTITAS DIRI               -->
+    <!-- ========================================== -->
+    <div id="identitas-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-slate-100 my-8">
+            <div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center">
+                        <i class="fa-solid fa-id-card"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-display text-lg font-bold text-slate-900">Edit Data Identitas</h3>
+                        <p class="text-xs text-slate-500">Perbarui informasi profil utama Anda</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('identitas-modal')" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="identitas-form" onsubmit="saveIdentitas(event)" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Lengkap</label>
+                        <input type="text" id="input-nama" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-primary-500 outline-none text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Tanggal Lahir</label>
+                        <input type="text" id="input-ttl" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-primary-500 outline-none text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Status / Pekerjaan</label>
+                        <input type="text" id="input-pekerjaan" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-primary-500 outline-none text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Jenis Kelamin</label>
+                        <select id="input-jk" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-primary-500 outline-none text-sm bg-white">
+                            <option value="Perempuan">Perempuan</option>
+                            <option value="Laki-laki">Laki-laki</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Hobi</label>
+                        <input type="text" id="input-hobi" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-primary-500 outline-none text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Tokoh Idola</label>
+                        <input type="text" id="input-idola" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-primary-500 outline-none text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Alamat Lengkap</label>
+                    <input type="text" id="input-alamat" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-primary-500 outline-none text-sm">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">No. Kontak / WA</label>
+                        <input type="text" id="input-wa" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-primary-500 outline-none text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Username Instagram</label>
+                        <input type="text" id="input-ig" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-primary-500 outline-none text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Username TikTok</label>
+                        <input type="text" id="input-tiktok" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-primary-500 outline-none text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">URL Foto Profil (Opsional)</label>
+                    <input type="url" id="input-foto" placeholder="https://..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-primary-500 outline-none text-sm">
+                </div>
+
+                <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                    <button type="button" onclick="closeModal('identitas-modal')" class="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-sm shadow-md shadow-primary-600/20">
+                        Simpan Perubahan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 3: FORM TAMBAH / UPDATE DATA SECTION -->
+    <!-- ========================================== -->
+    <div id="section-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-100 my-8">
+            <div class="flex items-center justify-between pb-4 mb-5 border-b border-slate-100">
+                <div>
+                    <h3 id="section-modal-title" class="font-display text-lg font-bold text-slate-900">Kelola Data</h3>
+                    <p class="text-xs text-slate-500">Tambah item baru atau hapus data yang ada</p>
+                </div>
+                <button onclick="closeModal('section-modal')" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Form Tambah Item Baru -->
+            <form id="section-form" onsubmit="addSectionItem(event)" class="space-y-3 mb-6 bg-slate-50 p-4 rounded-2xl border border-slate-200/70">
+                <div>
+                    <label id="label-item-title" class="block text-xs font-semibold text-slate-700 mb-1">Judul / Nama Item</label>
+                    <input type="text" id="input-item-title" required placeholder="Contoh: Juara 1 Lomba..." class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:border-primary-500 outline-none text-sm bg-white">
+                </div>
+                <div id="group-item-sub">
+                    <label id="label-item-sub" class="block text-xs font-semibold text-slate-700 mb-1">Tahun / Keterangan Singkat</label>
+                    <input type="text" id="input-item-sub" placeholder="Contoh: 2024 - Tingkat Sekolah" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 focus:border-primary-500 outline-none text-sm bg-white">
+                </div>
+                <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Tambahkan ke Daftar</span>
+                </button>
+            </form>
+
+            <!-- Daftar Item Saat Ini (Bisa Dihapus) -->
+            <div>
+                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Daftar Data Tersimpan</h4>
+                <ul id="modal-current-list" class="space-y-2 max-h-52 overflow-y-auto pr-1">
+                    <!-- Diisi via JS -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Token Keamanan yang Diminta
+        const SECRET_TOKEN = "170412";
+        let isTokenVerified = false;
+        let pendingAction = null;
+        let currentSection = null;
+
+        // Data Default Awal
+        const defaultData = {
+            identitas: {
+                nama: "Silvia Apriliany",
+                ttl: "17 April 2012",
+                alamat: "Jln Leuwidahukaler",
+                pekerjaan: "Murid",
+                hobi: "Main Game",
+                idola: "R.A. Kartini",
+                jk: "Perempuan",
+                wa: "08979928713",
+                ig: "slpiapril",
+                tiktok: "slpiapril",
+                foto: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80"
+            },
+            prestasi: [
+                { title: "Juara Harapan Lomba Cerdas Cermat", sub: "Tingkat Sekolah - 2024" },
+                { title: "Peringkat 5 Besar Kelas", sub: "Semester Genap - 2025" }
+            ],
+            keahlian: [
+                { title: "Strategi & Gaming", sub: "Mahir" },
+                { title: "Desain Poster Digital", sub: "Menengah" },
+                { title: "Kerja Sama Tim", sub: "Baik" },
+                { title: "Public Speaking", sub: "Menengah" }
+            ],
+            pendidikan: [
+                { title: "SMP / Sederajat", sub: "2024 - Sekarang" },
+                { title: "SD Negeri Leuwidahu", sub: "2018 - 2024" }
+            ],
+            organisasi: [
+                { title: "Anggota OSIS Seksi Kesenian", sub: "2024 - 2025" },
+                { title: "Ekstrakurikuler Pramuka", sub: "2023 - Sekarang" }
+            ],
+            karya: [
+                { title: "Portofolio Web Pribadi", sub: "Website biodata dan rekam jejak digital" },
+                { title: "Desain Kartu Ucapan Hari Kartini", sub: "Karya ilustrasi digital bertema emansipasi" }
+            ],
+            penyakit: [
+                { title: "Tidak Ada Riwayat Penyakit Berat", sub: "Kondisi sehat dan bugar" },
+                { title: "Alergi Debu Ringan", sub: "Terkendali" }
+            ]
+        };
+
+        // Load data dari LocalStorage jika tersedia
+        let portfolioData = JSON.parse(localStorage.getItem('silvia_portfolio_v1')) || defaultData;
+
+        function saveDataToStorage() {
+            localStorage.setItem('silvia_portfolio_v1', JSON.stringify(portfolioData));
+        }
+
+        // Render Semua Tampilan ke Layar
+        function renderAll() {
+            const id = portfolioData.identitas;
+            document.getElementById('disp-nama').textContent = id.nama;
+            document.getElementById('disp-ttl').textContent = id.ttl;
+            document.getElementById('disp-alamat').textContent = id.alamat;
+            document.getElementById('disp-pekerjaan').textContent = id.pekerjaan;
+            document.getElementById('disp-hobi').textContent = id.hobi;
+            document.getElementById('disp-idola').textContent = id.idola;
+            document.getElementById('disp-jk').textContent = id.jk;
+            
+            document.getElementById('disp-wa').textContent = id.wa;
+            const cleanWa = id.wa.replace(/^0/, '62').replace(/[^0-9]/g, '');
+            document.getElementById('link-wa').href = `https://wa.me/${cleanWa}`;
+
+            const cleanIg = id.ig.replace('@', '');
+            document.getElementById('disp-ig').textContent = `@${cleanIg}`;
+            document.getElementById('link-ig').href = `https://instagram.com/${cleanIg}`;
+
+            const cleanTiktok = id.tiktok.replace('@', '');
+            document.getElementById('disp-tiktok').textContent = `@${cleanTiktok}`;
+            document.getElementById('link-tiktok').href = `https://tiktok.com/@${cleanTiktok}`;
+
+            if (id.foto) {
+                document.getElementById('profile-img').src = id.foto;
+            }
+
+            // Render 6 Kategori
+            renderList('prestasi', 'amber');
+            renderSkills();
+            renderList('pendidikan', 'emerald');
+            renderList('organisasi', 'purple');
+            renderList('karya', 'pink');
+            renderList('penyakit', 'rose');
+        }
+
+        function renderList(key, color) {
+            const container = document.getElementById(`list-${key}`);
+            const items = portfolioData[key] || [];
+            
+            if (items.length === 0) {
+                container.innerHTML = `<li class="text-sm text-slate-400 italic py-2">Belum ada data ditambahkan.</li>`;
+                return;
+            }
+
+            container.innerHTML = items.map(item => `
+                <li class="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 flex items-start gap-3">
+                    <span class="w-2 h-2 rounded-full bg-${color}-500 mt-2 shrink-0"></span>
+                    <div>
+                        <p class="text-sm font-semibold text-slate-800">${escapeHtml(item.title)}</p>
+                        ${item.sub ? `<p class="text-xs text-slate-500 mt-0.5">${escapeHtml(item.sub)}</p>` : ''}
+                    </div>
+                </li>
+            `).join('');
+        }
+
+        function renderSkills() {
+            const container = document.getElementById('list-keahlian');
+            const items = portfolioData.keahlian || [];
+
+            if (items.length === 0) {
+                container.innerHTML = `<p class="text-sm text-slate-400 italic py-2">Belum ada keahlian ditambahkan.</p>`;
+                return;
+            }
+
+            container.innerHTML = items.map(item => `
+                <span class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-50/80 text-blue-800 border border-blue-100 text-xs font-semibold">
+                    <i class="fa-solid fa-check-circle text-blue-500"></i>
+                    <span>${escapeHtml(item.title)}</span>
+                    ${item.sub ? `<span class="text-blue-400 font-normal">(${escapeHtml(item.sub)})</span>` : ''}
+                </span>
+            `).join('');
+        }
+
+        // Sistem Token Keamanan
+        function requestToken(actionTarget) {
+            if (isTokenVerified) {
+                if (actionTarget === 'identitas') openIdentitasModal();
+                return;
+            }
+            pendingAction = actionTarget;
+            document.getElementById('token-input').value = '';
+            openModal('token-modal');
+            setTimeout(() => document.getElementById('token-input').focus(), 100);
+        }
+
+        function verifyToken(e) {
+            e.preventDefault();
+            const entered = document.getElementById('token-input').value.trim();
+            
+            if (entered === SECRET_TOKEN) {
+                isTokenVerified = true;
+                closeModal('token-modal');
+                showToast('Token valid! Akses menu identitas dibuka.', 'success');
+                
+                // Update badge status
+                const badge = document.getElementById('auth-status-badge');
+                badge.className = "inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold self-start sm:self-auto";
+                badge.innerHTML = `<i class="fa-solid fa-lock-open"></i><span>Akses Identitas Terbuka</span>`;
+
+                if (pendingAction === 'identitas') {
+                    openIdentitasModal();
+                }
+            } else {
+                showToast('Token salah! Silakan coba lagi.', 'error');
+                document.getElementById('token-input').value = '';
+                document.getElementById('token-input').focus();
+            }
+        }
+
+        // Kelola Modal Identitas
+        function openIdentitasModal() {
+            const id = portfolioData.identitas;
+            document.getElementById('input-nama').value = id.nama;
+            document.getElementById('input-ttl').value = id.ttl;
+            document.getElementById('input-pekerjaan').value = id.pekerjaan;
+            document.getElementById('input-jk').value = id.jk;
+            document.getElementById('input-hobi').value = id.hobi;
+            document.getElementById('input-idola').value = id.idola;
+            document.getElementById('input-alamat').value = id.alamat;
+            document.getElementById('input-wa').value = id.wa;
+            document.getElementById('input-ig').value = id.ig;
+            document.getElementById('input-tiktok').value = id.tiktok;
+            document.getElementById('input-foto').value = id.foto || '';
+            
+            openModal('identitas-modal');
+        }
+
+        function saveIdentitas(e) {
+            e.preventDefault();
+            portfolioData.identitas = {
+                nama: document.getElementById('input-nama').value.trim(),
+                ttl: document.getElementById('input-ttl').value.trim(),
+                pekerjaan: document.getElementById('input-pekerjaan').value.trim(),
+                jk: document.getElementById('input-jk').value,
+                hobi: document.getElementById('input-hobi').value.trim(),
+                idola: document.getElementById('input-idola').value.trim(),
+                alamat: document.getElementById('input-alamat').value.trim(),
+                wa: document.getElementById('input-wa').value.trim(),
+                ig: document.getElementById('input-ig').value.trim(),
+                tiktok: document.getElementById('input-tiktok').value.trim(),
+                foto: document.getElementById('input-foto').value.trim()
+            };
+            
+            saveDataToStorage();
+            renderAll();
+            closeModal('identitas-modal');
+            showToast('Data identitas berhasil diperbarui!', 'success');
+        }
+
+        // Kelola Modal 6 Kategori Data
+        const sectionTitles = {
+            prestasi: { title: "Update Data Prestasi", label1: "Nama Prestasi / Penghargaan", label2: "Tahun & Tingkat" },
+            keahlian: { title: "Update Data Keahlian", label1: "Nama Keahlian / Skill", label2: "Tingkat Penguasaan (Opsional)" },
+            pendidikan: { title: "Update Riwayat Pendidikan", label1: "Nama Sekolah / Institusi", label2: "Tahun Masuk - Lulus" },
+            organisasi: { title: "Update Pengalaman Organisasi", label1: "Nama Organisasi & Jabatan", label2: "Periode Tahun" },
+            karya: { title: "Update Karya / Produk", label1: "Judul Karya / Produk", label2: "Deskripsi Singkat" },
+            penyakit: { title: "Update Riwayat Penyakit", label1: "Nama Penyakit / Kondisi", label2: "Keterangan / Status" }
+        };
+
+        function openSectionModal(sectionKey) {
+            currentSection = sectionKey;
+            const meta = sectionTitles[sectionKey];
+            document.getElementById('section-modal-title').textContent = meta.title;
+            document.getElementById('label-item-title').textContent = meta.label1;
+            document.getElementById('label-item-sub').textContent = meta.label2;
+            
+            document.getElementById('input-item-title').value = '';
+            document.getElementById('input-item-sub').value = '';
+            
+            renderModalItemList();
+            openModal('section-modal');
+        }
+
+        function renderModalItemList() {
+            const listEl = document.getElementById('modal-current-list');
+            const items = portfolioData[currentSection] || [];
+            
+            if (items.length === 0) {
+                listEl.innerHTML = `<li class="text-xs text-slate-400 italic py-2">Belum ada data pada kategori ini.</li>`;
+                return;
+            }
+
+            listEl.innerHTML = items.map((item, idx) => `
+                <li class="flex items-center justify-between gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200/70">
+                    <div class="overflow-hidden">
+                        <p class="text-xs font-bold text-slate-800 truncate">${escapeHtml(item.title)}</p>
+                        ${item.sub ? `<p class="text-[11px] text-slate-500 truncate">${escapeHtml(item.sub)}</p>` : ''}
+                    </div>
+                    <button type="button" onclick="deleteSectionItem(${idx})" class="w-7 h-7 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-600 flex items-center justify-center shrink-0 transition-colors" title="Hapus item">
+                        <i class="fa-solid fa-trash-can text-xs"></i>
+                    </button>
+                </li>
+            `).join('');
+        }
+
+        function addSectionItem(e) {
+            e.preventDefault();
+            const title = document.getElementById('input-item-title').value.trim();
+            const sub = document.getElementById('input-item-sub').value.trim();
+            
+            if (!title) return;
+
+            portfolioData[currentSection].unshift({ title, sub });
+            saveDataToStorage();
+            renderAll();
+            renderModalItemList();
+            
+            document.getElementById('input-item-title').value = '';
+            document.getElementById('input-item-sub').value = '';
+            showToast('Data baru berhasil ditambahkan!', 'success');
+        }
+
+        function deleteSectionItem(index) {
+            portfolioData[currentSection].splice(index, 1);
+            saveDataToStorage();
+            renderAll();
+            renderModalItemList();
+            showToast('Data berhasil dihapus.', 'info');
+        }
+
+        // Utilitas Modal & Toast
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            const colors = {
+                success: 'bg-emerald-600 text-white',
+                error: 'bg-rose-600 text-white',
+                info: 'bg-slate-800 text-white'
+            };
+
+            const icons = {
+                success: 'fa-circle-check',
+                error: 'fa-circle-exclamation',
+                info: 'fa-circle-info'
+            };
+
+            toast.className = `${colors[type]} px-4 py-3 rounded-2xl shadow-lg flex items-center gap-3 text-xs font-semibold transform transition-all duration-300 translate-y-2 opacity-0`;
+            toast.innerHTML = `<i class="fa-solid ${icons[type]} text-base"></i><span>${message}</span>`;
+            
+            container.appendChild(toast);
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            });
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Inisialisasi saat halaman dimuat
+        window.addEventListener('DOMContentLoaded', renderAll);
+    </script>
+</body>
+</html>
+```
